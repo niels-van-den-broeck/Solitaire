@@ -1,9 +1,13 @@
+import throttle from 'lodash/throttle';
+
 import CardStack from "./piles/cardstack";
 import Deck from "./deck";
 import Foundation from "./piles/foundation";
 import Tableau from "./piles/tableau";
 import Stock from "./piles/stock";
 import GameDimensions from "./piles/game-dimensions";
+import Card from "./card";
+
 
 export default class Game {
     canvas: HTMLCanvasElement;
@@ -15,6 +19,10 @@ export default class Game {
     waste: CardStack;
     foundation: Foundation = new Foundation();
     tableau: Tableau = new Tableau();
+    clickListener?: (e: MouseEvent) => void;
+    hoverListener?: (e: MouseEvent) => void;
+
+    scale: number = 1;
 
     constructor(canvas: HTMLCanvasElement, spriteSheet: HTMLImageElement) {
         this.canvas = canvas;
@@ -39,6 +47,54 @@ export default class Game {
         }
 
         this.stock = new Stock(deck);
+
+        this.hoverListener = throttle((e: MouseEvent) => {
+            const playableCards = this.getAllPlayableCards();
+            console.log(playableCards)
+            const canvasCoords = this.canvas.getBoundingClientRect();
+            const x = (e.clientX - canvasCoords.left) / this.scale;
+            const y = (e.clientY - canvasCoords.top) / this.scale;
+
+            const hoveredCards = playableCards.filter((card) => card.isPointInside(x, y));
+            if (hoveredCards.length) {
+                this.canvas.style.cursor = "pointer";
+            } else {
+                this.canvas.style.cursor = "default";
+            }
+        }, 100);
+
+        this.canvas.addEventListener("mousemove", this.hoverListener);
+    }
+
+    getAllPlayableCards() {
+        const cards: Card[] = [];
+
+        this.tableau.stacks.forEach((stack) => {
+            if (stack.cards.length) cards.push(...stack.cards.filter((card) => card.isShowing));
+        });
+
+        this.foundation.stacks.forEach((stack) => {
+            if (stack.cards.length) cards.push(...stack.cards.filter((card) => card.isShowing));
+        });
+
+        return cards;
+    }
+
+    update() {
+        if (this.clickListener) this.canvas.removeEventListener("click", this.clickListener);
+
+        this.clickListener = (e: MouseEvent) => {
+            const playableCards = this.getAllPlayableCards();
+
+            const canvasCoords = this.canvas.getBoundingClientRect();
+            const x = (e.clientX - canvasCoords.left) / this.scale;
+            const y = (e.clientY - canvasCoords.top) / this.scale;
+
+            const clickedCards = playableCards.filter((card) => card.isPointInside(x, y));
+            console.log(clickedCards)
+        };
+        
+        this.canvas.addEventListener("click", this.clickListener);
     }
 
     render() {
@@ -48,8 +104,8 @@ export default class Game {
         this.ctx.fillStyle = 'green';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        const scale = this.canvas.width / GameDimensions.width;
-        this.ctx.transform(scale, 0, 0, scale, 0, 0);
+        this.scale = this.canvas.width / GameDimensions.width;
+        this.ctx.transform(this.scale, 0, 0, this.scale, 0, 0);
 
         this.stock.render(this.ctx);
         this.tableau.stacks.forEach((stack) => stack.render(this.ctx));

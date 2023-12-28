@@ -13,6 +13,9 @@ export default class Card {
     type: keyof typeof SPRITE_SHEET_OFFSET;
     value: number;
     image: HTMLImageElement;
+    isShowing: boolean = false;
+    x: number = 0;
+    y: number = 0;
 
     static TYPES = ["spades", "hearts", "clubs", "diamonds"] as const;
     static CARD_WIDTH = CARD_SPRITE_WIDTH * 2.5;
@@ -23,20 +26,38 @@ export default class Card {
       this.value = value;
       this.image = image;
     }
+
+    setPosition(x: number, y: number) {
+      this.x = x;
+      this.y = y;
+    }
+
+    setVisibility(isShowing: boolean) {
+      this.isShowing = isShowing;
+    }
+
+    isPointInside(x: number, y: number) {
+      return (
+        x >= this.x &&
+        x <= this.x + Card.CARD_WIDTH &&
+        y >= this.y &&
+        y <= this.y + Card.CARD_HEIGHT
+      );
+    }
   
-    render(ctx: CanvasRenderingContext2D, x: number, y: number, showFront = true) {
+    render(ctx: CanvasRenderingContext2D) {
       const offset = this.value - 1;
 
-      const offsetParameter = showFront ? this.type : 'cardBacks';
+      const offsetParameter = this.isShowing ? this.type : 'cardBacks';
 
       ctx.drawImage(
         this.image,
-        showFront ? offset * CARD_SPRITE_WIDTH : 0,
+        this.isShowing ? offset * CARD_SPRITE_WIDTH : 0,
         CARD_SPRITE_HEIGHT * SPRITE_SHEET_OFFSET[offsetParameter],
         CARD_SPRITE_WIDTH,
         CARD_SPRITE_HEIGHT,
-        x,
-        y,
+        this.x,
+        this.y,
         Card.CARD_WIDTH,
         Card.CARD_HEIGHT,
       );

@@ -35,7 +35,9 @@ export default class CardStack {
 
         this.cards.forEach((card, i) => {
             const y = this.stackdown ? this.y + i * STACK_PADDING : this.y;
-            card.render(ctx, this.x, y, this.cards.length - i <= this.amountCardsShowing);
+            card.setPosition(this.x, y);
+            card.setVisibility(i >= this.cards.length - this.amountCardsShowing);
+            card.render(ctx);
         });
     }
 }

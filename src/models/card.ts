@@ -15,8 +15,8 @@ export default class Card {
     image: HTMLImageElement;
 
     static TYPES = ["spades", "hearts", "clubs", "diamonds"] as const;
-    static CARD_WIDTH = CARD_SPRITE_WIDTH * 2;
-    static CARD_HEIGHT = CARD_SPRITE_HEIGHT * 2;
+    static CARD_WIDTH = CARD_SPRITE_WIDTH * 2.5;
+    static CARD_HEIGHT = CARD_SPRITE_HEIGHT * 2.5;
 
     constructor(type: keyof typeof SPRITE_SHEET_OFFSET, value: number, image: HTMLImageElement) {
       this.type = type;
@@ -31,7 +31,7 @@ export default class Card {
 
       ctx.drawImage(
         this.image,
-        offset * CARD_SPRITE_WIDTH,
+        showFront ? offset * CARD_SPRITE_WIDTH : 0,
         CARD_SPRITE_HEIGHT * SPRITE_SHEET_OFFSET[offsetParameter],
         CARD_SPRITE_WIDTH,
         CARD_SPRITE_HEIGHT,

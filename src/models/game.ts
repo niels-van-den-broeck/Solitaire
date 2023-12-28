@@ -2,6 +2,8 @@ import CardStack from "./piles/cardstack";
 import Deck from "./deck";
 import Foundation from "./piles/foundation";
 import Tableau from "./piles/tableau";
+import Stock from "./piles/stock";
+import GameDimensions from "./piles/game-dimensions";
 
 export default class Game {
     canvas: HTMLCanvasElement;
@@ -9,7 +11,7 @@ export default class Game {
     spriteSheet: HTMLImageElement;
     deck?: Deck;
     
-    pile: CardStack;
+    stock?: Stock;
     waste: CardStack;
     foundation: Foundation = new Foundation();
     tableau: Tableau = new Tableau();
@@ -21,34 +23,35 @@ export default class Game {
         if (!ctx) throw new Error("Could not get canvas context");
         this.ctx = ctx;
         this.spriteSheet = spriteSheet;
-        this.pile = new CardStack(canvas.width - 200, 50, 0, false);
         this.waste = new CardStack(canvas.width - 350, 50);
     }
 
     initialize() {
-        this.deck = new Deck(this.spriteSheet);
-        this.deck.shuffle();
+        const deck = new Deck(this.spriteSheet);
+        deck.shuffle();
 
         for (let i = 0; i < 7; i++) {
             for (let j = 0; j < i + 1; j++) {
-                const card = this.deck.cards.pop();
+                const card = deck.cards.pop();
                 if (!card) throw new Error("Ran out of cards");
                 this.tableau.stacks[i].add(card);
             }
         }
 
-        while (this.deck.cards.length > 0) {
-            const card = this.deck.cards.pop();
-            if (!card) throw new Error("Ran out of cards");
-            this.pile.add(card);
-        }
+        this.stock = new Stock(deck);
     }
 
     render() {
+        if (!this.stock) throw new Error("Game has not been not initialized");
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = 'green';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.pile.render(this.ctx);
+        const scale = this.canvas.width / GameDimensions.width;
+        this.ctx.transform(scale, 0, 0, scale, 0, 0);
 
+        this.stock.render(this.ctx);
         this.tableau.stacks.forEach((stack) => stack.render(this.ctx));
         this.foundation.stacks.forEach((stack) => stack.render(this.ctx));
     }

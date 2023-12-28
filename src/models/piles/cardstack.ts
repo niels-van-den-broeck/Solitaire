@@ -1,5 +1,7 @@
 import Card from "../card";
+import GameDimensions from "./game-dimensions";
 
+const STACK_PADDING = GameDimensions.height * 0.02;
 export default class CardStack {
     cards: Card[] = [];
     x: number;
@@ -26,12 +28,13 @@ export default class CardStack {
 
     render(ctx: CanvasRenderingContext2D) {
         if (!this.cards.length) {
+
             ctx.strokeRect(this.x, this.y, Card.CARD_WIDTH, Card.CARD_HEIGHT);
             return;
         }
 
         this.cards.forEach((card, i) => {
-            const y = this.stackdown ? this.y + i * 30 : this.y;
+            const y = this.stackdown ? this.y + i * STACK_PADDING : this.y;
             card.render(ctx, this.x, y, this.cards.length - i <= this.amountCardsShowing);
         });
     }

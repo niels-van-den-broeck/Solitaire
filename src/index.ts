@@ -21,14 +21,30 @@ async function start() {
   const app = document.getElementById("app") as HTMLDivElement;
   const canvas = document.createElement("canvas");
 
-  canvas.width = 1500;
-  canvas.height = 5000;
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
   canvas.style.border = "1px solid black";
   app.appendChild(canvas);
+
+  const canvasDimensions = canvas.getClientRects().item(0);
+  if (!canvasDimensions) throw new Error("Could not get canvas dimensions");
+
+  canvas.width = canvasDimensions.width;
+  canvas.height = canvasDimensions.height;
 
   const game = new Game(canvas, image);
   game.initialize();
   game.render();
+
+  window.addEventListener("resize", () => {
+    const canvasDimensions = canvas.getClientRects().item(0);
+    if (!canvasDimensions) throw new Error("Could not get canvas dimensions");
+
+    canvas.width = canvasDimensions.width;
+    canvas.height = canvasDimensions.height;
+
+    game.render();
+  });
 }
 
 start();

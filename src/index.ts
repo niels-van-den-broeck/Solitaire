@@ -42,7 +42,6 @@ async function start() {
     canvas.width = canvasDimensions.width;
     canvas.height = canvasDimensions.height;
 
-    game.update();
     game.render();
   }, 1000 / 60);
 

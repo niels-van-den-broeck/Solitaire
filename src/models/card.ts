@@ -1,3 +1,5 @@
+import CardStack from "./piles/cardstack";
+
 const SPRITE_SHEET_OFFSET = {
   spades: 0,
   hearts: 1,
@@ -13,7 +15,10 @@ export default class Card {
     type: keyof typeof SPRITE_SHEET_OFFSET;
     value: number;
     image: HTMLImageElement;
-    isShowing: boolean = false;
+    isPlayable: boolean = false;
+    isVisible: boolean = false;
+    stack?: CardStack;
+
     x: number = 0;
     y: number = 0;
 
@@ -32,8 +37,16 @@ export default class Card {
       this.y = y;
     }
 
-    setVisibility(isShowing: boolean) {
-      this.isShowing = isShowing;
+    setPlayable(isPlayable: boolean) {
+      this.isPlayable = isPlayable;
+    }
+
+    setVisible(isVisible: boolean) {
+      this.isVisible = isVisible;
+    }
+
+    setStack(stack: CardStack) {
+      this.stack = stack;
     }
 
     isPointInside(x: number, y: number) {
@@ -48,11 +61,11 @@ export default class Card {
     render(ctx: CanvasRenderingContext2D) {
       const offset = this.value - 1;
 
-      const offsetParameter = this.isShowing ? this.type : 'cardBacks';
+      const offsetParameter = this.isVisible ? this.type : 'cardBacks';
 
       ctx.drawImage(
         this.image,
-        this.isShowing ? offset * CARD_SPRITE_WIDTH : 0,
+        this.isVisible ? offset * CARD_SPRITE_WIDTH : 0,
         CARD_SPRITE_HEIGHT * SPRITE_SHEET_OFFSET[offsetParameter],
         CARD_SPRITE_WIDTH,
         CARD_SPRITE_HEIGHT,

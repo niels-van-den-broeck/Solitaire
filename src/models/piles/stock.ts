@@ -4,25 +4,29 @@ import CardStack from "./cardstack";
 import GameDimensions from "../game-dimensions";
 
 export default class Stock {
-    cards: CardStack;
+    stack: CardStack;
 
     constructor(deck:Deck) {
-        this.cards = new CardStack(GameDimensions.DEFAULT_PADDING, GameDimensions.DEFAULT_PADDING, false);
+        this.stack = new CardStack(GameDimensions.width - GameDimensions.DEFAULT_PADDING - Card.CARD_WIDTH, GameDimensions.DEFAULT_PADDING, false);
 
         while (deck.cards.length > 0) {
             const card = deck.cards.pop();
             if (!card) throw new Error("Ran out of cards");
-            this.cards.add(card);
+            this.add(card);
         }
     }
 
     add(card: Card) {
         card.setPlayable(false);
         card.setVisible(false);
-        this.cards.add(card);
+        this.stack.add(card);
+    }
+
+    remove() {
+        return this.stack.remove()
     }
 
     render(ctx: CanvasRenderingContext2D) {
-        this.cards.render(ctx);
+        this.stack.render(ctx);
     }
 }

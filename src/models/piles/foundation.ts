@@ -4,13 +4,12 @@ import CardStack from "./cardstack";
 import GameDimensions from "../game-dimensions";
 
 
-const LAST_STACK_X = GameDimensions.width - GameDimensions.DEFAULT_PADDING - Card.CARD_WIDTH;
-const STACK_DECREMENT = Card.CARD_WIDTH + GameDimensions.DEFAULT_PADDING;
+const STACK_INCREMENT = Card.CARD_WIDTH + GameDimensions.DEFAULT_PADDING;
 const Y = GameDimensions.DEFAULT_PADDING;
 
 // The four piles at the upper right which you complete to win the game.
 export default class Foundation implements PlayableArea {
-    stacks: CardStack[] = [new CardStack(LAST_STACK_X - STACK_DECREMENT * 3, Y, false), new CardStack(LAST_STACK_X - STACK_DECREMENT * 2, Y, false), new CardStack(LAST_STACK_X - STACK_DECREMENT * 1, Y, false), new CardStack(LAST_STACK_X, Y, false)];
+    stacks: CardStack[] = [new CardStack(GameDimensions.DEFAULT_PADDING, Y, false), new CardStack(GameDimensions.DEFAULT_PADDING + STACK_INCREMENT * 1, Y, false), new CardStack(GameDimensions.DEFAULT_PADDING + STACK_INCREMENT * 2, Y, false), new CardStack(GameDimensions.DEFAULT_PADDING + STACK_INCREMENT * 3, Y, false)];
 
     isAddingAllowed(stack: CardStack, card: Card) {
         if (!stack.cards.length) return card.value === 1;

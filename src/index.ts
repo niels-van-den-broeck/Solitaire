@@ -1,7 +1,7 @@
 import "./styles.css";
-import spriteSrc from "./images/cards-spritesheet.png";
+import spriteSrc from "./images/old-spritesheet.png";
 
-import Game from "./models/game";
+import GameHandler from "./presenters/game-handler";
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   const image = new Image();
@@ -32,19 +32,8 @@ async function start() {
   canvas.width = canvasDimensions.width;
   canvas.height = canvasDimensions.height;
 
-  const game = new Game(canvas, image);
-  game.initialize();
-
-  setInterval(() => {
-    const canvasDimensions = canvas.getClientRects().item(0);
-    if (!canvasDimensions) throw new Error("Could not get canvas dimensions");
-
-    canvas.width = canvasDimensions.width;
-    canvas.height = canvasDimensions.height;
-
-    game.render();
-  }, 1000 / 60);
-
+  const game = new GameHandler(canvas, image);
+  game.startGame();
 }
 
 start();

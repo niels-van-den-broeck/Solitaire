@@ -1,12 +1,14 @@
 import Card from "../card";
 import GameDimensions from "../game-dimensions";
 
-const STACK_PADDING = GameDimensions.height * 0.02;
+const STACK_PADDING = GameDimensions.height * 0.03;
 export default class CardStack {
     cards: Card[] = [];
     readonly x: number;
     readonly y: number;
     stackdown: boolean;
+
+    STACK_PADDING = STACK_PADDING;
 
     constructor(x: number, y: number, stackdown = true) {
         this.x = x;
@@ -21,20 +23,27 @@ export default class CardStack {
     }
 
     remove() {
+        if (!this.cards.length) return null;
         const card = this.cards.pop();
         this.updateCardCoords();
-
-        const topCard = this.getTopCard();
-        if (topCard) {
-            topCard.setPlayable(true);
-            topCard.setVisible(true);
-        }
 
         return card;
     }
 
     getTopCard() {
         return this.cards[this.cards.length - 1];
+    }
+
+    isTopCard(card: Card) {
+        return card === this.getTopCard();
+    }
+
+    groupWithCardsOnTop(card: Card) {
+        const index = this.cards.indexOf(card);
+
+        if (index === -1) throw new Error("Card not found in stack");
+        
+        return this.cards.slice(index, this.cards.length);
     }
 
     isPointInside(x: number, y: number) {

@@ -74,19 +74,20 @@ export default class GameBus {
     }
 
     stockAccessed() {
-        const pulledCard = this.model.stock?.remove();
+        let pulledCard = this.model.stock?.remove();
         
         if (!pulledCard) {
             [...this.model.waste.stack.cards].reverse().forEach((card) => {
                 this.model.stock?.add(card);
+                this.model.waste.remove();
             });
 
-            return false;
+            pulledCard = this.model.stock?.remove();
         };
 
-        this.model.waste.add(pulledCard);
+        if (pulledCard) this.model.waste.add(pulledCard);
 
-        return true;
+        return Boolean(pulledCard);
     }
 
     foundationFilled(stack: CardStack) {

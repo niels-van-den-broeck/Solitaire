@@ -6,7 +6,6 @@
 ### Bugs
 - Fix eventing system
 - Fix foundation cards not being playable
-- Stock disappears when waste moves back to stock
 
 ### QoL
 - Highlight color when hovering a droppable area

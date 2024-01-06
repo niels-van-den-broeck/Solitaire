@@ -26,6 +26,10 @@ export default class Waste {
         this.stack.add(card);
     }
 
+    remove() {
+        return this.stack.remove();
+    }
+
     render(ctx: CanvasRenderingContext2D) {
         this.stack.render(ctx)
     }

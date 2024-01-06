@@ -5,7 +5,6 @@
 
 ### Bugs
 - Fix eventing system
-- Fix foundation cards not being playable
 
 ### QoL
 - Highlight color when hovering a droppable area

@@ -22,8 +22,13 @@ export default class Foundation implements PlayableArea {
         if (!this.stacks.includes(stack)) throw new Error("Invalid stack");
 
         if (this.isAddingAllowed(stack, card)) {
-            card.setPlayable(false);
+            card.setPlayable(true);
             card.setVisible(true);
+
+            stack.cards.forEach(card => {
+                card.setPlayable(false);
+            })
+
             stack.add(card);
 
             return true

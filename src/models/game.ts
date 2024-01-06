@@ -4,6 +4,7 @@ import Tableau from "./piles/tableau";
 import Stock from "./piles/stock";
 import Card from "./card";
 import Waste from './piles/waste';
+import CardStack from "./piles/cardstack";
 
 export default class Game {
     deck?: Deck;
@@ -37,6 +38,22 @@ export default class Game {
         if (this.foundation.stacks.every((stack) => stack.cards.length === 13)) {
             alert("You win!");
         }
+    }
+
+    findValidMove() {
+        const movedCards = this.floating;
+
+        if (!movedCards.length) return;
+
+        const cardToMove = movedCards[0];
+
+        const foundationMove = movedCards.length === 1 ? this.foundation.stacks.find((stack) => stack !== cardToMove.stack && this.foundation.isAddingAllowed(stack, cardToMove)): undefined;
+        const tableauMove = this.tableau.stacks.find((stack) => stack !== cardToMove.stack && this.tableau.isAddingAllowed(stack, cardToMove));
+
+        return {
+            foundation: foundationMove,
+            tableau: tableauMove,
+        };
     }
 
     getAllPlayableCards() {

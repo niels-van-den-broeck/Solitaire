@@ -8,8 +8,8 @@
 
 ### QoL
 - Highlight color when hovering a droppable area
-- Implement click to move
 - Implement move suggestions/hints
+- Click to move should make smarter moves instead of picking the first available
 
 ### Features
 - Implement undo moves

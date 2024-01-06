@@ -1,4 +1,3 @@
-import GameDimensions from "./game-dimensions";
 import CardStack from "./piles/cardstack";
 
 const SPRITE_SHEET_OFFSET = {
@@ -66,6 +65,10 @@ export default class Card {
         y >= this.y &&
         y <= this.y + Card.CARD_HEIGHT
       );
+    }
+
+    determineColour() {
+      return this.type === "spades" || this.type === "clubs" ? "black" : "red";
     }
   
     render(ctx: CanvasRenderingContext2D) {

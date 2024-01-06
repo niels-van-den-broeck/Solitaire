@@ -128,8 +128,18 @@ export default class GameHandler {
             }
 
             if (isClick) {
-                if (this.model.floating.length) this.bus.emit('event://card-dropped', undefined);
+                const possibleMoves =  this.model.findValidMove();
+
+                if (possibleMoves?.foundation) {
+                    this.bus.emit('event://foundation-filled', possibleMoves.foundation);
+                } else if (possibleMoves?.tableau) {
+                    this.bus.emit('event://tableau-changed', possibleMoves.tableau);
+                } else {
+                    if (this.model.floating.length) this.bus.emit('event://card-dropped', undefined);
+                }
+
                 this.clearTemporaryListeners();
+                
                 return;
             }
 

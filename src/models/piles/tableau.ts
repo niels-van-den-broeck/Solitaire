@@ -12,9 +12,9 @@ export default class Tableau implements PlayableArea {
     
     isAddingAllowed(stack: CardStack, card: Card) {
         if (!stack.cards.length) return card.value === 13;
-        const topCard = stack.cards[stack.cards.length - 1];
+        const topCard = stack.getTopCard();
 
-        return topCard.type !== card.type && topCard.value === card.value + 1;
+        return card.determineColour() !== topCard.determineColour() && topCard.value === card.value + 1;
     }
 
     addCardToStack(stack: CardStack, card: Card) {

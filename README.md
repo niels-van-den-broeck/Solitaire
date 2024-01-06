@@ -3,7 +3,7 @@
 ### Game Menus
 - Implement starting / restarting menu
 
-### Bugs
+### Refactors
 - Fix eventing system
 
 ### QoL

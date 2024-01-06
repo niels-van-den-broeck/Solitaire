@@ -33,10 +33,5 @@ export default class GameView {
         this.model.foundation.stacks.forEach((stack) => stack.render(this.ctx));
         this.model.tableau.stacks.forEach((stack) => stack.render(this.ctx));
         this.model.floating.forEach((card) => card.render(this.ctx));
-        // Render the game view based on the model's state
-
-        // You can access the model's properties and methods here
     }
-
-    // Other view methods and event handlers can be defined here
 }

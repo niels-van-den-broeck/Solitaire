@@ -1,7 +1,7 @@
 import "./styles.css";
 import spriteSrc from "./images/old-spritesheet.png";
 
-import GameHandler from "./presenters/game-handler";
+import GameHandler from "./handlers/game-handler";
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   const image = new Image();
